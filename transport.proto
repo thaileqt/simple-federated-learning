@@ -11,7 +11,7 @@ message Empty {
 
 message Info {
     int32 nodeNumber = 1;
-    int32 port = 2;
+    string address = 2;
 }
 
 message Chunk {
@@ -20,5 +20,7 @@ message Chunk {
 
 service FederatedApp{
     rpc EstablishConnection(Info) returns (Empty) {}
+    rpc GetNodeStatus(Empty) returns (Empty) {}
     rpc Train(stream Chunk) returns (Empty) {} 
+    rpc GetParameters(Empty) returns (stream Chunk) {}
 }

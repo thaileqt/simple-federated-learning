@@ -13,7 +13,6 @@ class Net(nn.Module):
         super().__init__()
         self.conv1 = nn.Conv2d(1, 32, 3, 1)
         self.conv2 = nn.Conv2d(32, 64, 3, 1)
-        # self.conv3 = nn.Conv2d(64, 128, 3, 1)
         self.pool = nn.MaxPool2d(2, 2)
         self.fc1 = nn.Linear(1600, 1024)
         self.fc2 = nn.Linear(1024, 10)
@@ -21,14 +20,13 @@ class Net(nn.Module):
     def forward(self, x):
         x = nn.Dropout(0.5)(self.pool(F.relu(self.conv1(x))))
         x = self.pool(F.relu(self.conv2(x)))
-        # x = self.pool(F.relu(self.conv3(x)))
         x = nn.Flatten()(x)
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
         return x
 
 
-def load_data() -> Tuple[DataLoader, DataLoader]:
+def load_data(n_train_samples: int = 1000, n_val_samples: int = 500) -> Tuple[DataLoader, DataLoader]:
     transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))
@@ -37,8 +35,8 @@ def load_data() -> Tuple[DataLoader, DataLoader]:
     batch_size = 64
     indices = np.arange(20000)
     np.random.shuffle(indices)
-    train_dataset = Subset(full_train_dataset, torch.from_numpy(indices[:1000]))
-    val_dataset = Subset(full_train_dataset, torch.from_numpy(indices[1000:1500]))
+    train_dataset = Subset(full_train_dataset, torch.from_numpy(indices[:n_train_samples]))
+    val_dataset = Subset(full_train_dataset, torch.from_numpy(indices[n_train_samples:n_train_samples+n_train_samples]))
 
     train_dl = DataLoader(train_dataset, batch_size, shuffle=True, drop_last=True)
     val_dl = DataLoader(val_dataset, batch_size, shuffle=True, drop_last=True)

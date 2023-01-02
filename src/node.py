@@ -17,23 +17,38 @@ class Node(transport_pb2_grpc.FederatedAppServicer):
         class Servicer(transport_pb2_grpc.FederatedAppServicer):
 
             def __init__(self):
-                self.tmp_file_name = 'src/parameters/node_tmp'
+                self.tmp_file_name = 'src/parameters/tmp/node_tmp'
+                self.is_active = None
 
             def EstablishConnection(self, request_iterator, context):
-                self.nodeNumber = request_iterator.nodeNumber
-                self.port = request_iterator.port
-                response = transport_pb2.Empty()
-                response.value = 1
-                return response
+                self.is_active = True
+                self.node_number = request_iterator.nodeNumber
+                self.address = request_iterator.address
+                self.params_path = f'src/parameters/nodes/node_{self.node_number}_parameters.pth'
+                return transport_pb2.Empty(value=1)
+            
+            def GetNodeStatus(self, request_iterator, context):
+                if self.is_active:
+                    return transport_pb2.Empty(value=1)
+                return transport_pb2.Empty(value=0)
+
 
             def Train(self, request_iterator, context):
+                if self.is_active is None:
+                    print('node is not active')
+                    return
+                # receives parameters
                 save_chunks_to_file(request_iterator, self.tmp_file_name)
                 file_chunks = get_file_chunks(self.tmp_file_name)
+                # saves locally
+                save_chunks_to_file(file_chunks, self.params_path)
+                return transport_pb2.Empty(value=functions.Train(self.params_path))
 
-                file_path = 'src/parameters/node_parameters.pth'
-                save_chunks_to_file(file_chunks, file_path)
-                functions.Train(file_path)
-                return transport_pb2.Empty(value=1)
+            def GetParameters(self, request_iterator, context):
+                chunk_generator = get_file_chunks(self.params_path)
+                return chunk_generator
+
+            
 
         self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
         transport_pb2_grpc.add_FederatedAppServicer_to_server(Servicer(), self.server)

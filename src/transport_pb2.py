@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0ftransport.proto\"\x1b\n\nParameters\x12\r\n\x05value\x18\x01 \x01(\x0c\"\x16\n\x05\x45mpty\x12\r\n\x05value\x18\x01 \x01(\x05\"(\n\x04Info\x12\x12\n\nnodeNumber\x18\x01 \x01(\x05\x12\x0c\n\x04port\x18\x02 \x01(\x05\"\x17\n\x05\x43hunk\x12\x0e\n\x06\x62uffer\x18\x01 \x01(\x0c\x32S\n\x0c\x46\x65\x64\x65ratedApp\x12&\n\x13\x45stablishConnection\x12\x05.Info\x1a\x06.Empty\"\x00\x12\x1b\n\x05Train\x12\x06.Chunk\x1a\x06.Empty\"\x00(\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0ftransport.proto\"\x1b\n\nParameters\x12\r\n\x05value\x18\x01 \x01(\x0c\"\x16\n\x05\x45mpty\x12\r\n\x05value\x18\x01 \x01(\x05\"+\n\x04Info\x12\x12\n\nnodeNumber\x18\x01 \x01(\x05\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\"\x17\n\x05\x43hunk\x12\x0e\n\x06\x62uffer\x18\x01 \x01(\x0c\x32\x9b\x01\n\x0c\x46\x65\x64\x65ratedApp\x12&\n\x13\x45stablishConnection\x12\x05.Info\x1a\x06.Empty\"\x00\x12!\n\rGetNodeStatus\x12\x06.Empty\x1a\x06.Empty\"\x00\x12\x1b\n\x05Train\x12\x06.Chunk\x1a\x06.Empty\"\x00(\x01\x12#\n\rGetParameters\x12\x06.Empty\x1a\x06.Chunk\"\x00\x30\x01\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'transport_pb2', globals())
@@ -25,9 +25,9 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _EMPTY._serialized_start=48
   _EMPTY._serialized_end=70
   _INFO._serialized_start=72
-  _INFO._serialized_end=112
-  _CHUNK._serialized_start=114
-  _CHUNK._serialized_end=137
-  _FEDERATEDAPP._serialized_start=139
-  _FEDERATEDAPP._serialized_end=222
+  _INFO._serialized_end=115
+  _CHUNK._serialized_start=117
+  _CHUNK._serialized_end=140
+  _FEDERATEDAPP._serialized_start=143
+  _FEDERATEDAPP._serialized_end=298
 # @@protoc_insertion_point(module_scope)
