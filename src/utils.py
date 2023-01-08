@@ -17,4 +17,6 @@ def get_file_chunks(filename):
             
 
 if __name__ == '__main__':
-    pass
+    a = {'1': 'a', '2': 'b'}
+    b = 'a'
+    print(b in a.values())
