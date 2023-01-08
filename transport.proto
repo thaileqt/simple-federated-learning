@@ -18,9 +18,14 @@ message Chunk {
     bytes buffer = 1;
 }
 
+message Message {
+    string message = 1;
+}
+
 service FederatedApp{
     rpc EstablishConnection(Info) returns (Empty) {}
-    rpc GetNodeStatus(Empty) returns (Empty) {}
-    rpc Train(stream Chunk) returns (Empty) {} 
+    rpc Train(Empty) returns (Message) {} 
     rpc GetParameters(Empty) returns (stream Chunk) {}
+    rpc SetParameters(stream Chunk) returns (Empty) {}
+    rpc Evaluate(Empty) returns (Empty) {}
 }

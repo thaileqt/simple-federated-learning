@@ -94,7 +94,7 @@ def test(model: Net, test_dataset: DataLoader) -> float:
 
 def evaluate(model: Net, val_dl: DataLoader) -> Tuple[float, float]:
     loss_fn = nn.CrossEntropyLoss()
-    net.eval()
+    model.eval()
     with torch.no_grad():
         for x_batch, y_batch in val_dl:
             y_pred = model(x_batch)
@@ -104,8 +104,8 @@ def evaluate(model: Net, val_dl: DataLoader) -> Tuple[float, float]:
 
 if __name__ == '__main__':
     net = Net()
-    torch.save(net.state_dict(), 'global_parameters.pth')
-    # train_dl, val_dl = load_data()
+    torch.save(net.state_dict(), 'src/parameters/client/global_parameters.pth')
+    train_dl, val_dl = load_data()
     # # train(net, 5, train_dl)
-    # res = evaluate(net, val_dl)
+    res = evaluate(net, val_dl)
     # print(res)
