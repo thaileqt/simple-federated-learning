@@ -13,7 +13,7 @@ import torch
 
 
 
-class Node(transport_pb2_grpc.FederatedAppServicer):
+class App(transport_pb2_grpc.FederatedAppServicer):
     def __init__(self):
 
         class Servicer(transport_pb2_grpc.FederatedAppServicer):
@@ -32,9 +32,9 @@ class Node(transport_pb2_grpc.FederatedAppServicer):
             
             def Train(self, request_iterator, context):
                 if self.is_active is None:
-                    return transport_pb2.Message(message='Node is not active')
+                    return transport_pb2.Message(status=1, message='Node is not active')
                 if self.model is None:
-                    return transport_pb2.Message(message='No parameters is set. Please do it first...')
+                    return transport_pb2.Message(status=1, message='No parameters is set. Please do it first...')
                 
                 # Load the data for training
                 train_dl, val_dl = mnist.load_data()
@@ -45,9 +45,9 @@ class Node(transport_pb2_grpc.FederatedAppServicer):
                     print()
                     torch.save(self.model.state_dict(), self.params_path)
                     _, acc = mnist.evaluate(self.model, val_dl)
-                    return transport_pb2.Message(message=f'{acc}')
+                    return transport_pb2.Message(status=0, message=f'{acc}')
                 except Exception as e:
-                    return transport_pb2.Message(message=e)
+                    return transport_pb2.Message(status=0, message=e)
 
             def GetParameters(self, request_iterator, context):
                 chunk_generator = get_file_chunks(self.params_path)
@@ -85,7 +85,7 @@ def args():
     parser = argparse.ArgumentParser(
         prog = 'Federated Learning',
         description = 'Node for execute federated learning')
-    parser.add_argument('port', type=int, help='port of  the node')
+    parser.add_argument('port', type=int, help='port of the node')
     args = parser.parse_args()
     return args
 
@@ -93,4 +93,4 @@ def args():
 if __name__ == '__main__':
     args = args()
     port = args.port
-    Node().serve(port)
+    App().serve(port)

@@ -36,7 +36,7 @@ def load_data(n_train_samples: int = 1000, n_val_samples: int = 500) -> Tuple[Da
     indices = np.arange(20000)
     np.random.shuffle(indices)
     train_dataset = Subset(full_train_dataset, torch.from_numpy(indices[:n_train_samples]))
-    val_dataset = Subset(full_train_dataset, torch.from_numpy(indices[n_train_samples:n_train_samples+n_train_samples]))
+    val_dataset = Subset(full_train_dataset, torch.from_numpy(indices[n_train_samples:n_train_samples+n_val_samples]))
 
     train_dl = DataLoader(train_dataset, batch_size, shuffle=True, drop_last=True)
     val_dl = DataLoader(val_dataset, batch_size, shuffle=True, drop_last=True)
@@ -101,11 +101,3 @@ def evaluate(model: Net, val_dl: DataLoader) -> Tuple[float, float]:
             loss = loss_fn(y_pred, y_batch)
             acc = ((torch.argmax(y_pred, dim=1) == y_batch).float()).mean()
     return float(loss), float(acc)
-
-if __name__ == '__main__':
-    net = Net()
-    torch.save(net.state_dict(), 'src/parameters/client/global_parameters.pth')
-    train_dl, val_dl = load_data()
-    # # train(net, 5, train_dl)
-    res = evaluate(net, val_dl)
-    # print(res)
