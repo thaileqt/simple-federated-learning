@@ -8,8 +8,10 @@ from multiprocessing import freeze_support
 from utils import *
 from stub_functions import *
 from connect import *
+from abstracts.server import Server
 
-class Client:
+
+class App(Server):
 
     def __init__(self):
         if not os.path.isdir(os.path.join('src/parameters')):
@@ -32,7 +34,6 @@ class Client:
         futures = [executor.submit(establish, i) for i in range(n) if stubs[addresses[i]] in active_stubs.values()]
         concurrent.futures.wait(futures)
         
-
     def set_parameters(self):
         executor = concurrent.futures.ProcessPoolExecutor(n)
         futures = [executor.submit(set_parameters, i, self.global_params_path) for i in range(n) if stubs[addresses[i]] in active_stubs.values()]
@@ -96,18 +97,18 @@ def get_input() -> int:
 if __name__ == '__main__':
     freeze_support()
 
-    client = Client()
-    client.establish_connection()
+    app = App()
+    app.establish_connection()
     while True:
         i = get_input()
         if i == 1:
-            client.set_parameters()
+            app.set_parameters()
         elif i == 2:
-            client.train()
+            app.train()
         elif i == 3:
-            client.average_parameters()
+            app.average_parameters()
         elif i == 4:
-            client.save_averaged_parameters()
+            app.save_averaged_parameters()
         else:
             break
 
